@@ -1,0 +1,73 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input FileInput {
+  fileName: String!
+  mime: String!
+  sizeBytes: Int!
+}
+
+type Image {
+  createdAt: DateTime!
+  fileName: String!
+  height: Int
+  id: ID!
+  labels: [Label!]!
+  previewUrl: String!
+  progress: Int!
+  sizeBytes: Int
+  status: String!
+  upload: UploadInfo!
+  width: Int
+}
+
+type InitUploadPayload {
+  uploadId: ID!
+  urls: [SignedUrlPayload!]!
+}
+
+type Label {
+  confidence: Float
+  id: ID!
+  name: String!
+  type: String!
+}
+
+type Mutation {
+  completeUpload(uploadId: ID!): Boolean!
+  initUpload(files: [FileInput!]!): InitUploadPayload!
+}
+
+type Query {
+  getUser: UserResponse!
+  myImages: [Image!]!
+}
+
+type SignedUrlPayload {
+  expiresAt: String!
+  fileName: String!
+  imageId: ID!
+  key: String!
+  url: String!
+}
+
+type UploadInfo {
+  createdAt: DateTime!
+  id: ID!
+  processedFiles: Int!
+  progressOverall: Int!
+  status: String!
+  totalFiles: Int!
+}
+
+type UserResponse {
+  email: String!
+  message: String
+  name: String!
+}

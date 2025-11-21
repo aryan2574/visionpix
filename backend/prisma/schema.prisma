@@ -1,0 +1,86 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  images    Image[]
+  uploads   Upload[]
+}
+
+model Upload {
+  id               String   @id @default(uuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now())
+  status           UploadStatus @default(UPLOADING)
+  totalFiles       Int
+  processedFiles   Int      @default(0)
+  progressOverall  Int      @default(0)
+
+  images           Image[]
+}
+
+model Image {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  uploadId    String
+  upload      Upload   @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+
+  objectKey   String   @unique
+  fileName    String
+  sizeBytes   Int?                
+  width       Int?
+  height      Int?
+  status      ImageStatus @default(UPLOADING)
+  progress    Int       @default(0)
+  contentHash String?   @unique
+  createdAt   DateTime  @default(now())
+
+  labels      Label[]
+
+  @@index([userId])
+  @@index([uploadId])
+}
+
+model Label {
+  id         String   @id @default(uuid())
+  imageId    String
+  image      Image    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  type       LabelType
+  name       String
+  confidence Decimal? @db.Decimal(5,2)
+  createdAt  DateTime @default(now())
+}
+
+enum UploadStatus {
+  UPLOADING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+enum ImageStatus {
+  UPLOADING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+enum LabelType {
+  OBJECT
+  SCENE
+}
