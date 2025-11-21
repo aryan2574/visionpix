@@ -82,3 +82,12 @@ Ensure your AWS credentials have:
 - **Storage:** AWS S3
 - **AI:** AWS Rekognition
 - **Deployment:** Docker, Docker Compose
+
+## Screenshots
+
+![screenshot1](doc/screenshot1.png)
+![screenshot2](doc/screenshot2.png)
+![screenshot3](doc/screenshot3.png)
+![screenshot4](doc/screenshot4.png)
+
+Image copyright - https://unsplash.com/
